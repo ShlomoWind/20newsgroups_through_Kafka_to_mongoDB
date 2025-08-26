@@ -3,7 +3,7 @@ from sklearn.datasets import fetch_20newsgroups
 # Define a class to load and return the 20 Newsgroups dataset
 class Data:
     def __init__(self):
-        self.newsgroups_interesting = interesting_cats=['alt.atheism',
+        self.interesting_cats=['alt.atheism',
         'comp.graphics',
         'comp.os.ms-windows.misc',
         'comp.sys.ibm.pc.hardware',
@@ -13,7 +13,7 @@ class Data:
         'rec.autos',
         'rec.motorcycles',
         'rec.sport.baseball']
-        self.newsgroups_not_interesting = not_interesting_cats=['rec.sport.hockey',
+        self.not_interesting_cats=['rec.sport.hockey',
         'sci.crypt',
         'sci.electronics',
         'sci.med',
@@ -23,13 +23,17 @@ class Data:
         'talk.politics.mideast',
         'talk.politics.misc',
         'talk.religion.misc']
+        self.interesting_data = fetch_20newsgroups(subset='all', categories=self.interesting_cats)
+        self.not_interesting_data = fetch_20newsgroups(subset='all', categories=self.not_interesting_cats)
+        self.idx = 0
 
-# Fetch and return the data for the interesting categories
-    def get_newsgroups_interesting(self):
-      newsgroups_interesting = fetch_20newsgroups(subset='all', categories=self.newsgroups_interesting)
-      return newsgroups_interesting.data
-
-# Fetch and return the data for the not interesting categories
-    def get_newsgroups_not_interesting(self):
-      newsgroups_not_interesting = fetch_20newsgroups(subset='all', categories=self.newsgroups_not_interesting)
-      return newsgroups_not_interesting.data
+# Method to get batches of interesting and not interesting data
+    def get_data(self):
+        starter = self.idx
+        end = self.idx + 10
+        interesting_batch = self.interesting_data.data[starter:end]
+        not_interesting_batch = self.not_interesting_data.data[starter:end]
+        self.idx = end
+        if self.idx >= len(self.interesting_data.data) or self.idx >= len(self.not_interesting_data.data):
+            self.idx = 0
+        return interesting_batch, not_interesting_batch
