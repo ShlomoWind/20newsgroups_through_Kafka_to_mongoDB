@@ -1,12 +1,13 @@
 from fastapi import FastAPI
-from data_loader import Data
-from publisher import Producer
-import uvicorn
+from publish.data_loader import Data
+from publish.publisher import Producer
 
+# Create FastAPI app, Data loader and Producer instance
 app = FastAPI()
 data = Data()
 producer = Producer("localhost:9092")
 
+# publish interesting and not interesting data by topic
 @app.get("/")
 def publish_data():
     try:
