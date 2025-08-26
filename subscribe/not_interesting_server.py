@@ -1,7 +1,9 @@
-from fastapi import FastAPI
-from subscribe.consumer import Consumer
+import os
 
-address = "localhost:9092"
+from fastapi import FastAPI
+from consumer import Consumer
+
+address = os.getenv("KAFKA_BROKER", "localhost:9092")
 topic = "not_interesting"
 
 # Create FastAPI app and Consumer instance
@@ -16,7 +18,3 @@ def consume_data():
         return {"status": "Data consumption started"}
     except Exception as e:
         return {"status": "Error", "message": str(e)}
-
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app, host="localhost", port=8004)
