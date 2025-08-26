@@ -1,8 +1,11 @@
+import os
+
 from kafka import KafkaConsumer
 from pymongo import MongoClient
 from datetime import datetime, timezone
 
-mongo_url = "mongodb://localhost:27017/"
+host = os.getenv("MONGO_HOST", "localhost")
+mongo_url = f"mongodb://{host}:27017/"
 db_name = "news_db"
 
 # Receives server address and topic in constructor and creates a consumer instance

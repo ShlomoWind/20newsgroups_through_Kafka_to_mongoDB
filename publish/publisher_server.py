@@ -1,9 +1,11 @@
+import os
+
 from fastapi import FastAPI
-from publish.data_loader import Data
-from publish.publisher import Producer
+from data_loader import Data
+from publisher import Producer
 import uvicorn
 
-address = "localhost:9092"
+address = os.getenv("KAFKA_BROKER", "localhost:9092")
 topic_1 = "interesting"
 topic_2 = "not_interesting"
 
@@ -24,6 +26,3 @@ def publish_data():
         return {"status": "Data published"}
     except Exception as e:
         return {"status": "Error", "message": str(e)}
-
-if __name__ == "__main__":
-    uvicorn.run(app, host="localhost", port=8003)
